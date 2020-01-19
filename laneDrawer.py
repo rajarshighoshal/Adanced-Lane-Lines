@@ -1,6 +1,15 @@
 def draw_patch(img, left_fit, right_fit, M):
     """
-    Draw the lane lines on the image `img` using the poly `left_fit` and `right_fit`.
+    Draw the lane lines on the image.
+    
+    Parameters:
+    img (numpy array): numpy array form of the original image
+    left_fit (numpy array): indices of best fit points of left lane
+    right_fit (numpy array): indices of best fit points of right lane
+    M (numpy array): reverse transformation matrix of warping operation
+    
+    Returns:
+    numpy array: output image
     """
     import numpy as np
     import cv2
@@ -19,7 +28,7 @@ def draw_patch(img, left_fit, right_fit, M):
     pts = np.hstack((pts_left, pts_right))
     
     # Draw the lane onto the warped blank image
-    cv2.fillPoly(color_warp, np.int_([pts]), (0,255, 0))
+    cv2.fillPoly(color_warp, np.int_([pts]), (255,255,0))
     
     # Warp the blank back to original image space using inverse perspective matrix (Minv)
     newwarp = cv2.warpPerspective(color_warp, M, (img.shape[1], img.shape[0])) 

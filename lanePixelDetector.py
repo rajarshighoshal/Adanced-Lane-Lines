@@ -52,17 +52,30 @@ class Line():
         self.counter = 0
         return line_fit
 
-#         except (TypeError, np.linalg.LinAlgError):
-#             line_fit = self.best_fit
-#             if first_try == True:
-#                 self.reset()
-#             else:
-#                 self.count_check()
-
-#             return line_fit
-
 
 def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100, minpix=50):
+    """
+    Takes the binary image and find left and right lane lines without any previous findings.
+    
+    Parameters:
+    bin_image (numpy array): binary masked image after warping
+    ym_per_pix (float): meter length per pixel for y direction
+    xm_per_pix (float): meter length per pixel for x direction
+    nwindows (int): number of sliding windows 
+    margin (int): margin in which area search for best pixel values
+    minpix (int): minimum of number of pixels below which x and y position don't chnage
+    
+    Returns:
+    numpy array: left lane curve coefficients after polynomial fitting
+    numpy array: right lane curve coefficients after polynomial fitting
+    numpy array: left lane curve coefficients after polynomial fitting in meters
+    numpy array: right lane curve coefficients after polynomial fitting in meters
+    numpy array: indices where right lane pixels are found 
+    numpy array: indices where left lane pixels are found
+    numpy array: output image after drawing sliding windows
+    numpy array: all the nonzero x values
+    numpy array: all the nonzero y values
+    """
     import numpy as np
     import cv2
     
