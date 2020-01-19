@@ -37,15 +37,33 @@ def ROI(original_image):
     
     Parameters:
     img (numpy array): numpy array form of the image
+    
+    Returns:
+    numpyt array: numpy array form of the masked image containing only region of interest
     """
     import numpy as np
     import cv2
     
     img_size = original_image.shape
-    bottom_left=[190, img_size[0]] #left bottom most point of trapezium
-    bottom_right=[1200, img_size[0]] #right bottom most point of trapezium
-    top_left=[590, img_size[0]//2 + 90] # left top most point of trapezium
-    top_right=[700, img_size[0]//2 + 90] # right top most point of trapezium
-    # fit the trapezoid
-    cv2.polylines(original_image,np.int32(np.array([[bottom_left,top_left,top_right,bottom_right]])),True,(0,0,255),10)
-    return None
+    bottom_left=[190, img_size[0]] #left bottom most point of trapezoid
+    bottom_right=[1200, img_size[0]] #right bottom most point of trapezoid
+    top_left=[590, img_size[0]//2 + 90] # left top most point of trapezoid
+    top_right=[700, img_size[0]//2 + 90] # right top most point of trapezoid
+    vertices = np.array([bottom_left, top_left, top_right, bottom_right], dtype=np.int32)
+    
+    #defining a blank mask to start with
+    mask = np.zeros_like(original_image)   
+    
+    #defining a 3 channel or 1 channel color to fill the mask with depending on the input image
+    if len(img_size) > 2:
+        channel_count = img_size[2]  # i.e. 3 or 4 depending on your image
+        ignore_mask_color = (255,) * channel_count
+    else:
+        ignore_mask_color = 255
+        
+    #filling pixels inside the polygon defined by "vertices" with the fill color    
+    cv2.fillPoly(mask, [vertices], ignore_mask_color)
+    
+    #returning the image only where mask pixels are nonzero
+    masked_image = cv2.bitwise_and(original_image, mask)
+    return masked_image
