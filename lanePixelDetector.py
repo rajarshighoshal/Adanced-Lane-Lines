@@ -7,6 +7,8 @@ class Line():
         self.reset()
 
     def reset(self):
+        import numpy as np
+        
         # flag of line detection
         self.detected = False  
         # recent polynomial coefficients
@@ -24,7 +26,7 @@ class Line():
 
     def count_check(self, n):
         ''' 
-        Resets the line class upon failing five times in a row.
+        Resets the line class upon failing n times in a row.
         '''
         # Increment the counter
         self.counter += 1
@@ -39,24 +41,34 @@ class Line():
         Upon the error being thrown, either reset the line or add to counter.
         '''
         n = 5
-        self.current_fit = np.polyfit(y_points, x_points, 2)
-        self.all_x = x_points
-        self.all_y = y_points
-        self.recent_fit.append(self.current_fit)
-        if len(self.recent_fit) > 1:
-            self.diffs = (self.recent_fit[-2] - self.recent_fit[-1]) / self.recent_fit[-2]
-        self.recent_fit = self.recent_fit[-n:]
-        self.best_fit = np.mean(self.recent_fit, axis = 0)
-        line_fit = self.current_fit
-        self.detected = True
-        self.counter = 0
-        return line_fit
+        try:
+            self.current_fit = np.polyfit(y_points, x_points, 2)
+            self.all_x = x_points
+            self.all_y = y_points
+            self.recent_fit.append(self.current_fit)
+            if len(self.recent_fit) > 1:
+                self.diffs = (self.recent_fit[-2] - self.recent_fit[-1]) / self.recent_fit[-2]
+            self.recent_fit = self.recent_fit[-n:]
+            self.best_fit = np.mean(self.recent_fit, axis = 0)
+            line_fit = self.current_fit
+            self.detected = True
+            self.counter = 0
+            return line_fit
 
+        except:
+            line_fit = self.best_fit
+            if first_try == True:
+                self.reset()
+            else:
+                self.count_check(n)
+
+            return line_fit
+    
 
 def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100, minpix=50):
     """
     Takes the binary image and find left and right lane lines without any previous findings.
-    
+
     Parameters:
     bin_image (numpy array): binary masked image after warping
     ym_per_pix (float): meter length per pixel for y direction
@@ -64,7 +76,7 @@ def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100,
     nwindows (int): number of sliding windows 
     margin (int): margin in which area search for best pixel values
     minpix (int): minimum of number of pixels below which x and y position don't chnage
-    
+
     Returns:
     numpy array: left lane curve coefficients after polynomial fitting
     numpy array: right lane curve coefficients after polynomial fitting
@@ -78,7 +90,7 @@ def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100,
     """
     import numpy as np
     import cv2
-    
+
     # create a histogram
     hist = np.sum(bin_image[bin_image.shape[0]//2:,:], axis=0) 
     # output image
@@ -99,7 +111,7 @@ def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100,
     # create list for left and right points
     left_lane_inds = []
     right_lane_inds = []
-    
+
     for window in range(nwindows):
         win_y_low = bin_image.shape[0] - (window+1)*window_height
         win_y_high = bin_image.shape[0] - window*window_height
@@ -127,7 +139,7 @@ def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100,
             left_x_current = np.int(np.mean(nonzerox[good_left_inds]))
         if len(good_right_inds) > minpix:        
             right_x_current = np.int(np.mean(nonzerox[good_right_inds]))
-    
+
     # Concatenate the arrays of indices
     left_lane_inds = np.concatenate(left_lane_inds)
     right_lane_inds = np.concatenate(right_lane_inds)
@@ -140,9 +152,9 @@ def find_first_lanes(bin_image, ym_per_pix, xm_per_pix, nwindows=25, margin=100,
     # Fit a second order polynomial to each
     left_fit = np.polyfit(lefty, leftx, 2)
     right_fit = np.polyfit(righty, rightx, 2)
-    
+
     # Fit a second order polynomial to each
     left_fit_m = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
     right_fit_m = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
-    
+
     return left_fit, right_fit, left_fit_m, right_fit_m, left_lane_inds, right_lane_inds, out, nonzerox, nonzeroy
