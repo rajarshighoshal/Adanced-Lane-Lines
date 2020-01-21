@@ -23,6 +23,7 @@ The goals/steps of this project are the following:
 #### 1. How camera matrix and distortion coefficients are calculated. Also an example of a distortion corrected calibration image.
 
 The camera calibration code could be found on the [undistortImg.py](undistortImg.py) file. Using `cv2.findChessboardCorners`, the corners points are stored in an array `imgpoints` for each calibration image where the chessboard could be found. The object points will always be the same as the known coordinates of the chessboard with zero as 'z' coordinate because the chessboard is flat. The object points are stored in an array called `objpoints`. I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera` function. I applied this distortion correction to the test image using the `cv2.undistort` function and obtained this result:
+
 <br/>Original Chessboard
 ![Camera calibration original](readme_imgs/chessboard.jpg "Original Chessboard") 
 <br/>Undistorted Chessboard
@@ -38,30 +39,21 @@ The following image shows the result of applying the camera calibration to one o
 <br/>Undistorted Image
 ![Distortion correction undistorted](readme_imgs/undistorted.jpg "Undistorted Image")
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image. Provide an example of a binary image result.
+#### 3. How color transforms, gradients or other methods are used to create a thresholded binary image.
 
-The code used to experiment with color, gradients, and thresholds could be found on the [02-Color Transform and Gradients Threshold notebook](02-Color%20Transform%20and%20Gradients%20Threshold.ipynb).
+The code used to generate binary image based on color, gradients and thresholds could be found on the [colorChannel.py](colorChannel.py).
 
-A color transformation to HLS was done `In [6]` and the S channel was selected because it shows more contracts on the lane lines as shown in the next figure:
+* R channel is used n RGB color space for it's prominent contrast features in case of lane lines. 
+* A color transformation to HLS was done using `cv2.cvtColor(image, cv2.COLOR_RGB2HLS)` and the S channel was selected because it was showing more contrasts on the lane lines.
+* Then sobel in the x direction is applied as it was showing more prominent resulst using `cv2.Sobel` function.
+* Then I have combined R, S, and sobelX and choose whnerver two of the three are activated as activated points.
 
-![S Channel](images/schannel.png)
+The following image shows the result of applying these operations to one of the test images:
 
-After the color transformation had been done, it was time for gradients. The following gradients were calculated:
-
-- Sobel X and Sobel Y: `In [10]` and `In [11]`
-- Magnitude : `In [13]`
-- Gradient direction : `In [14]`
-- Combination of all the above (Sobel X and Sobel Y) or (Magnitude and Gradient): `In [16]`
-
-After a few back-and-forward exploration with thresholds, the following picture will show the different gradients on some test images side-by-side:
-
-![Side by Side gradients](images/sidebyside.png)
-
-The full combination of these gradients leads to a "noisy" binary image. That is why on the main notebook [Advanced Lane Lines notebook](Advance%20Lane%20Lines.ipynb). Only the combination of Sobel X and Sobel Y was used to continue with the pipeline. The following image shows the binary image obtained with that combination on the test images:
-
-![Final gradient calculation](images/finalgradient.png)
-
-On the [Advanced Lane Lines notebook](Advance%20Lane%20Lines.ipynb), the code used to calculate this images is from `In [7]` to `In [13]`.
+<br/>Original Image
+![Binary original](readme_imgs/original.jpg "Original Image") 
+<br/>Undistorted Image
+![Binary Masked](readme_imgs/binary_image.jpg "Binary Image")
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provided an example of a transformed image.
 
