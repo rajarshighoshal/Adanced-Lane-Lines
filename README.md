@@ -121,9 +121,13 @@ To display the lane lines on the image, the polynomials where evaluated on a lin
 
 The code used for video pipeline is essentially image pipepline with some moderate modification. The code can be found here [videoPipeline.py](videoPipeline.py).<br/>The video output is:
 <br/>input Video
-![Input Video](roject_video.mp4 "Input Video")
+<video width="320" height="240" controls>
+  <source src="project_video.mp4" type="video/mp4">
+</video>
 <br/>Output Video
-![Output Video](project_video_output.mp4 "Output Video")
+<video width="320" height="240" controls>
+  <source src="project_video_output.mp4" type="video/mp4">
+</video>
 
 ### Discussion
 
