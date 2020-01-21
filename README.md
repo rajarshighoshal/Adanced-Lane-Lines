@@ -71,9 +71,11 @@ The following image shows the result of applying these operations to one of the 
 
 #### 4. How lane-line pixels and idetified and fit a polynomial with their positions
 
-The line detection code could be found at `In [17]` of the [Advanced Lane Lines notebook](Advance%20Lane%20Lines.ipynb). The algorithm calculates the histogram on the X axis. Finds the picks on the right and left side of the image, and collect the non-zero points contained on those windows. When all the points are collected, a polynomial fit is used (using `np.polyfit`) to find the line model. On the same code, another polynomial fit is done on the same points transforming pixels to meters to be used later on the curvature calculation. The following picture shows the points found on each window, the windows and the polynomials:
+The line detection code could be foundfound on [lanePixelDetector.py](lanePixelDetector.py).<br/>The algorithm calculates the histogram on the X axis. Finds the picks on the right and left side of the image, and collect the non-zero points contained on those windows. When all the points are collected, a polynomial fit is used (using `np.polyfit`) to find the line model. On the same code, another polynomial fit is done on the same points transforming pixels to meters to be used later on the curvature calculation. 
 
-![Polynomial fit](images/polyfit.png)
+The following image shows the result of applying these operations to one of the test images:
+
+![Lane Lines](readme_imgs/lane_lines.jpg 'Lane Lines')
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle on the center.
 
