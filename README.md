@@ -24,7 +24,7 @@ The goals/steps of this project are the following:
 
 The camera calibration code could be found on the [undistortImg.py](undistortImg.py) file. Using `cv2.findChessboardCorners`, the corners points are stored in an array `imgpoints` for each calibration image where the chessboard could be found. The object points will always be the same as the known coordinates of the chessboard with zero as 'z' coordinate because the chessboard is flat. The object points are stored in an array called `objpoints`. I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera` function. I applied this distortion correction to the test image using the `cv2.undistort` function and obtained this result:
 
-![Camera calibration](images/camera_calibration.png)
+![Camera calibration original](readme_imgs/chessboard.jpg "Original Image") ![Camera calibration undistorted](readme_imgs/undistorted_chessboard.jpg "Undistorted Image")
 
 The camera calibration and distortion coefficients are stored using `pickle` to be used on the main [notebook](Advance%20Lane%20Lines.ipynb)
 
