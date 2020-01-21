@@ -119,20 +119,17 @@ To display the lane lines on the image, the polynomials where evaluated on a lin
 
 #### 1. A link to final video output. 
 
-The code used for video pipeline is essentially image pipepline with some moderate modification. The code can be found here [videoPipeline.py](videoPipeline.py).<br/>The video output is:
-<br/>input Video
-<video width="320" height="240" controls>
-  <source src="project_video.mp4" type="video/mp4">
-</video>
-<br/>Output Video
-<video width="320" height="240" controls>
-  <source src="project_video_output.mp4" type="video/mp4">
-</video>
+The code used for video pipeline is essentially image pipepline with some moderate modification. The code can be found here [videoPipeline.py](videoPipeline.py).<br/>The video output is [Output Video](project_video_output.mp4 "output Video")
 
 ### Discussion
 
-#### 1. Briefly, discuss any problems/issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
+#### 1. Problems/issues you faced in your implementation of this project. Where will your pipeline likely fail?
 
-- There are a few improvements that could be done on the performance of the process due to repetitive calculations.
-- More information could be use from frame to frame to improve the robustness of the process.
-- Other gradients could be use (Ex. Laplacian) to improve the line detection.
+* The pipeline doen't work when ther is very bight sunlight on the road. 
+* Also it fails when curvature is really high.
+* It also doesn't recogmnise multiple curvatures in a single frame.
+
+##### 2.  What could you do to make it more robust?
+
+* If more test images can be collected with varying lighting condition then finding diffebnt thresholds and applying that could be helpful.
+* Higher degree polynomials can be use to tackel roads with multiple curves.
